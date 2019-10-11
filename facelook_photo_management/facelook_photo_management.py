@@ -222,13 +222,7 @@ if __name__ == "__main__":
     for file in os.listdir(directory):
         filename = os.fsdecode(file)   
         if filename.endswith(".jpeg") or filename.endswith(".jpg"): 
-            #print(input_folder+filename)
-            #print(filename)
             addFaces(input_face_folder+path_sep+filename,'faceCollection')
-
-
-
-
 
     directory = os.fsencode(input_folder)
     for file in os.listdir(directory):
