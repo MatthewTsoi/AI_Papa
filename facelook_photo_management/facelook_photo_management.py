@@ -1,11 +1,11 @@
 ##Main program 
 ## Before running this program, you need to have functional aws cli and boto3 installed.
 ##^^^^^^
-##Author: matthew.tsoi@gmail.com
+##Author: AI_Papa  (matthew.tsoi@gmail.com) 
 
 import boto3
 from botocore.exceptions import ClientError
-import logging,time, io, os
+import logging,time, io, os, shutil
 from PIL import Image, ImageDraw, ExifTags, ImageColor
 
 def init_logger():
@@ -69,7 +69,7 @@ def addFaces(filename='',collectionId=''):
 
     tic=time.time()
 
-    logging.info('Reading image file: '+filename)
+    logging.info('['+filename+'] Reading image file: '+filename)
     image = Image.open(open(filename,'rb'))
     stream = io.BytesIO()
     image.save(stream, format=image.format)
@@ -87,13 +87,13 @@ def addFaces(filename='',collectionId=''):
 
     toc = time.time()
 
-    logging.info ('Results for image file' + filename+'. Processing time: '+str(round((toc-tic),2))+' sec.')	
-    logging.debug ('Faces indexed:')						
+    logging.info ('['+filename+'] Add face completed. Processing time: '+str(round((toc-tic),2))+' sec.')	
+    logging.debug ('['+filename+'] Faces indexed:')						
     for faceRecord in response['FaceRecords']:
-        logging.info('  Face signature: ' + faceRecord['Face']['FaceId'])
-        logging.info('  Face ID: ' + faceRecord['Face']['ExternalImageId']) 
-        logging.info('  Confidence: {}'.format(faceRecord['Face']['Confidence']))
-        logging.debug('  Location: {}'.format(faceRecord['Face']['BoundingBox']))
+        logging.info('['+filename+']  Face signature: ' + faceRecord['Face']['FaceId'])
+        logging.info('['+filename+']  Face ID: ' + faceRecord['Face']['ExternalImageId']) 
+        logging.info('['+filename+']  Confidence: {}'.format(faceRecord['Face']['Confidence']))
+        logging.debug('['+filename+']  Location: {}'.format(faceRecord['Face']['BoundingBox']))
         
         faceIds.append([faceRecord['Face']['ExternalImageId'],faceRecord['Face']['FaceId']])
    
@@ -178,7 +178,6 @@ def matchFaces(collecitonId='',img_file='',debug=False):
 
         if response['FaceMatches']:
             #face.show()
-            #logging.info(response['FaceMatches']['ExternalImageId'])
             logging.info('['+img_file+'] Matched person ['+response['FaceMatches'][0]['Face']['ExternalImageId']+'] with similarity '+str(round(response['FaceMatches'][0]['Similarity'],2))+'%')
 
             matched_faces.append(response['FaceMatches'][0]['Face']['ExternalImageId'])
@@ -189,6 +188,12 @@ def matchFaces(collecitonId='',img_file='',debug=False):
 
     return matched_faces
 
+def isWindows():
+    if os.name=='nt':
+        return True
+    else:
+        return False
+
 ##Main routine
 if __name__ == "__main__":
     
@@ -197,6 +202,11 @@ if __name__ == "__main__":
     input_face_folder = './in_face/'
     output_folder='./out_photo'
     
+    ##determine OS platform to define path separator 
+    if isWindows():
+        path_sep='\\'
+    else:
+        path_sep='/'
 
     ##init logger 
     init_logger() 
@@ -214,25 +224,30 @@ if __name__ == "__main__":
         if filename.endswith(".jpeg") or filename.endswith(".jpg"): 
             #print(input_folder+filename)
             #print(filename)
-            logging.info(addFaces(input_face_folder+'/'+filename,'faceCollection'))
-            continue
-        else:
-            continue
-    
+            addFaces(input_face_folder+path_sep+filename,'faceCollection')
+
 
 
 
 
     directory = os.fsencode(input_folder)
     for file in os.listdir(directory):
-        filename = os.fsdecode(file)   
+        filename = os.fsdecode(file)  
+        matched_faces=[] 
         if filename.endswith(".jpeg") or filename.endswith(".jpg"): 
-            #print(input_folder+filename)
-            #print(filename)
-            matchFaces('faceCollection',input_folder+'/'+filename)
-            continue
-        else:
-            continue
+            matched_faces=matchFaces('faceCollection',input_folder+path_sep+filename)
+
+            ##place photo into target folder 
+            for matched_person in matched_faces:
+
+                ##creaete person folder if it does not exists yet
+                if os.path.exists(output_folder+path_sep+matched_person):
+                    pass
+                else:
+                    os.mkdir(output_folder+path_sep+matched_person)
+
+                shutil.copyfile(input_folder+path_sep+filename,output_folder+path_sep+matched_person+path_sep+filename)
+
     
     ##Detech faces for an imag
     #print(matchFaces('faceCollection','./in_photo/gathering_0001.jpeg'))
