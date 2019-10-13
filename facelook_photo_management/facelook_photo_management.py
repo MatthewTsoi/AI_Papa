@@ -3,9 +3,15 @@
 ##^^^^^^
 ##Author: AI_Papa  (matthew.tsoi@gmail.com) 
 
+##Import AWS client modules
 import boto3
 from botocore.exceptions import ClientError
+
+##Import modules for multi-thread and general OS utilities
 import logging,time, io, os, shutil
+from threading import Thread
+
+##Import mode for image processing, **Need additional PIP install 
 from PIL import Image, ImageDraw, ExifTags, ImageColor
 
 def init_logger():
@@ -30,7 +36,7 @@ def createCollection(collectionId=''):
 
     logging.info('Creating face index collection ['+collectionId+']')
     # Replace collectionID with the name of the collection that you want to create.
-    maxResults = 2
+    #maxResults = 2
 
     client=boto3.client('rekognition')
     response = client.create_collection(CollectionId=collectionId)
@@ -153,7 +159,26 @@ def detectFaces(img='',debug=False):
 
     return faces
 
-def matchFaces(collecitonId='',img_file='',debug=False):
+def matchFace(collectionId='',face='',img_file='',debug=False):
+    stream = io.BytesIO()
+    face.save(stream, format='PNG')
+    image_binary = stream.getvalue()
+
+    client = boto3.client('rekognition')
+    response = client.search_faces_by_image(CollectionId=collectionId,Image={'Bytes': image_binary},MaxFaces=123)
+
+    if debug:
+        print (response['FaceMatches'])
+        face.show()
+
+    if response['FaceMatches']:
+        #face.show()
+        logging.info('['+img_file+'] Matched person ['+response['FaceMatches'][0]['Face']['ExternalImageId']+'] with similarity '+str(round(response['FaceMatches'][0]['Similarity'],2))+'%')
+
+        matched_faces.append(response['FaceMatches'][0]['Face']['ExternalImageId'])
+
+    
+def matchFaces(collectionId='',img_file='',debug=False):
     ##Match detected faces with existing collection
 
 
@@ -162,25 +187,32 @@ def matchFaces(collecitonId='',img_file='',debug=False):
     faces=detectFaces(img_file)
 
     matched_faces=[]
+    threads=[]
 
-    client = boto3.client('rekognition')
+    #client = boto3.client('rekognition')
     for face in faces:
-        stream = io.BytesIO()
-        face.save(stream, format='PNG')
-        image_binary = stream.getvalue()
+        #stream = io.BytesIO()
+        #face.save(stream, format='PNG')
+        #image_binary = stream.getvalue()
 
-        response = client.search_faces_by_image(CollectionId=collecitonId,Image={
-        'Bytes': image_binary},MaxFaces=123)
+        #response = client.search_faces_by_image(CollectionId=collecitonId,Image={
+        #'Bytes': image_binary},MaxFaces=123)
     
-        if debug:
-            print (response['FaceMatches'])
-            face.show()
+        #if debug:
+        #    print (response['FaceMatches'])
+        #    face.show()
 
-        if response['FaceMatches']:
-            #face.show()
-            logging.info('['+img_file+'] Matched person ['+response['FaceMatches'][0]['Face']['ExternalImageId']+'] with similarity '+str(round(response['FaceMatches'][0]['Similarity'],2))+'%')
+        #if response['FaceMatches']:
+        #    #face.show()
+        #    logging.info('['+img_file+'] Matched person ['+response['FaceMatches'][0]['Face']['ExternalImageId']+'] with similarity '+str(round(response['FaceMatches'][0]['Similarity'],2))+'%')
 
-            matched_faces.append(response['FaceMatches'][0]['Face']['ExternalImageId'])
+        #    matched_faces.append(response['FaceMatches'][0]['Face']['ExternalImageId'])
+        t=Thread(target=matchFace,args=(collectionId,face,img_file,debug))
+        t.start()
+        threads.append(t)
+    
+    for t in threads:
+        t.join(180)
 
     toc = time.time()
 
@@ -211,7 +243,10 @@ if __name__ == "__main__":
     ##init logger 
     init_logger() 
 
-    removeCollection('faceCollection')
+    try:
+        removeCollection('faceCollection')
+    except:
+        logging.warning('Collection does not exists!')
 
     ##Create a face index collection
     createCollection('faceCollection')
@@ -219,12 +254,28 @@ if __name__ == "__main__":
     ##Add face index into collection from face index folder 
     #logging.info(addFaces('./in_face/donald.jpg','faceCollection'))
     directory = os.fsencode(input_face_folder)
+    threads=[]
+
+    tic=time.time()
+
     for file in os.listdir(directory):
         filename = os.fsdecode(file)   
         if filename.endswith(".jpeg") or filename.endswith(".jpg"): 
-            addFaces(input_face_folder+path_sep+filename,'faceCollection')
+            #addFaces(input_face_folder+path_sep+filename,'faceCollection')
+            t=Thread(target=addFaces,args=(input_face_folder+path_sep+filename,'faceCollection'))
+            t.start()
+            threads.append(t)
+    logging.info(str(len(threads))+' threads started for face index processing.')
+    ##Wait for all face index threads completed
+    for t in threads:
+        t.join(180)
 
+    toc=time.time()
+    logging.info('All faces added to collect in '+str(round(toc-tic,4))+'sec.')
+
+    ##Now detect faces from photo collection and put them into identified person folder(s)
     directory = os.fsencode(input_folder)
+    threads=[]
     for file in os.listdir(directory):
         filename = os.fsdecode(file)  
         matched_faces=[] 
@@ -242,6 +293,5 @@ if __name__ == "__main__":
 
                 shutil.copyfile(input_folder+path_sep+filename,output_folder+path_sep+matched_person+path_sep+filename)
 
-    
-    ##Detech faces for an imag
-    #print(matchFaces('faceCollection','./in_photo/gathering_0001.jpeg'))
+    ##Remove the face collection 
+    removeCollection('faceCollection')

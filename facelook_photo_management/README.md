@@ -1,12 +1,13 @@
 # Facelook Photo Management tool
 Face lookup tool for photo management using simple implementation of AWS Rekcognition services 
 
+
+> ## How can I sort out **thousands** photos and place them into different folders for individual faces? 
+
 ## Problem statement 
 One day, you and your family joined a birthday party. Everyone really enjoy it, and you even feel better as you used your new camera to take more than `two thousands(!!)` photos and tried out all the new (cool) features. 
 At the end of the event, parents suggest that "Hey Matt, please send me those photo I am on it, thx!"
 
-
-> How can I sort out **thousands** photos and place them into different folders for individual faces? 
 
 ## The solution
 Use **`AI`** to recognize your friends' face (signature) and let the program to sort them out for you :+1: 
@@ -17,7 +18,8 @@ https://docs.aws.amazon.com/rekognition/latest/dg/faces.html) services to achiev
 
 - [x] Get AWS account (there are free tiers for photo recognition)
 - [x] Setup your [AWS client](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html) in your desktop
-- [x] Setup your python 3.6+ environment including AWS boto3 module 
+- [x] Setup your python 3.6+ environment including AWS boto3 module. Refer to requirements.txt for python modules used
+
 
 
 
