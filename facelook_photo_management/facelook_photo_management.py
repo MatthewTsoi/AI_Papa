@@ -10,6 +10,7 @@ from botocore.exceptions import ClientError
 ##Import modules for multi-thread and general OS utilities
 import logging,time, io, os, shutil
 from threading import Thread
+from multiprocessing import Queue
 
 ##Import mode for image processing, **Need additional PIP install 
 from PIL import Image, ImageDraw, ExifTags, ImageColor
@@ -159,7 +160,7 @@ def detectFaces(img='',debug=False):
 
     return faces
 
-def matchFace(collectionId='',face='',img_file='',debug=False):
+def matchFace(matched_faces, collectionId='',face='',img_file='',debug=False):
     stream = io.BytesIO()
     face.save(stream, format='PNG')
     image_binary = stream.getvalue()
@@ -175,7 +176,8 @@ def matchFace(collectionId='',face='',img_file='',debug=False):
         #face.show()
         logging.info('['+img_file+'] Matched person ['+response['FaceMatches'][0]['Face']['ExternalImageId']+'] with similarity '+str(round(response['FaceMatches'][0]['Similarity'],2))+'%')
 
-        matched_faces.append(response['FaceMatches'][0]['Face']['ExternalImageId'])
+        #matched_faces.append(response['FaceMatches'][0]['Face']['ExternalImageId'])
+        matched_faces.put(response['FaceMatches'][0]['Face']['ExternalImageId'])
 
     
 def matchFaces(collectionId='',img_file='',debug=False):
@@ -186,28 +188,14 @@ def matchFaces(collectionId='',img_file='',debug=False):
     ##Get a list of faces from photo 
     faces=detectFaces(img_file)
 
-    matched_faces=[]
+    #matched_faces=[]
+    matched_faces=Queue()
     threads=[]
 
     #client = boto3.client('rekognition')
     for face in faces:
-        #stream = io.BytesIO()
-        #face.save(stream, format='PNG')
-        #image_binary = stream.getvalue()
 
-        #response = client.search_faces_by_image(CollectionId=collecitonId,Image={
-        #'Bytes': image_binary},MaxFaces=123)
-    
-        #if debug:
-        #    print (response['FaceMatches'])
-        #    face.show()
-
-        #if response['FaceMatches']:
-        #    #face.show()
-        #    logging.info('['+img_file+'] Matched person ['+response['FaceMatches'][0]['Face']['ExternalImageId']+'] with similarity '+str(round(response['FaceMatches'][0]['Similarity'],2))+'%')
-
-        #    matched_faces.append(response['FaceMatches'][0]['Face']['ExternalImageId'])
-        t=Thread(target=matchFace,args=(collectionId,face,img_file,debug))
+        t=Thread(target=matchFace,args=(matched_faces,collectionId,face,img_file,debug))
         t.start()
         threads.append(t)
     
@@ -216,9 +204,24 @@ def matchFaces(collectionId='',img_file='',debug=False):
 
     toc = time.time()
 
-    logging.info('['+img_file+'] Face matched completed and found ['+str(len(matched_faces))+'] faces in '+str(round(toc-tic,4))+'sec.')
 
-    return matched_faces
+    matched_size = matched_faces.qsize()
+    for i in range(matched_size):
+        matched_person = matched_faces.get()
+
+        ##creaete person folder if it does not exists yet
+        if os.path.exists(output_folder+path_sep+matched_person):
+            pass
+        else:
+            os.mkdir(output_folder+path_sep+matched_person)
+
+        shutil.copyfile(input_folder+path_sep+filename,output_folder+path_sep+matched_person+path_sep+filename)
+
+
+    #logging.info('['+img_file+'] Face matched completed and found ['+str(len(matched_faces))+'] faces in '+str(round(toc-tic,4))+'sec.')
+    logging.info('['+img_file+'] Face matched completed and found ['+str(matched_faces.qsize())+'] faces in '+str(round(toc-tic,4))+'sec.')
+
+#    return matched_faces
 
 def isWindows():
     if os.name=='nt':
@@ -283,15 +286,18 @@ if __name__ == "__main__":
             matched_faces=matchFaces('faceCollection',input_folder+path_sep+filename)
 
             ##place photo into target folder 
-            for matched_person in matched_faces:
+            #for matched_person in matched_faces:
+ #           matched_size = matched_faces.qsize()
+ #           for i in range(matched_size):
+ #               matched_person = matched_faces.get()
 
                 ##creaete person folder if it does not exists yet
-                if os.path.exists(output_folder+path_sep+matched_person):
-                    pass
-                else:
-                    os.mkdir(output_folder+path_sep+matched_person)
+ #               if os.path.exists(output_folder+path_sep+matched_person):
+ #                   pass
+ #               else:
+ #                   os.mkdir(output_folder+path_sep+matched_person)
 
-                shutil.copyfile(input_folder+path_sep+filename,output_folder+path_sep+matched_person+path_sep+filename)
+                #shutil.copyfile(input_folder+path_sep+filename,output_folder+path_sep+matched_person+path_sep+filename)
 
     ##Remove the face collection 
     removeCollection('faceCollection')
