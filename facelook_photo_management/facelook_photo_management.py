@@ -10,10 +10,10 @@ from botocore.exceptions import ClientError
 ##Import modules for multi-thread and general OS utilities
 import logging,time, io, os, shutil
 from threading import Thread
-from multiprocessing import Queue
+#from multiprocessing import Queue
 
 ##Import mode for image processing, **Need additional PIP install 
-from PIL import Image, ImageDraw, ExifTags, ImageColor
+from PIL import Image#, ImageDraw, ExifTags, ImageColor
 
 def init_logger():
     # set up logging to file - see previous section for more details
@@ -160,7 +160,7 @@ def detectFaces(img='',debug=False):
 
     return faces
 
-def matchFace(matched_faces, collectionId='',face='',img_file='',debug=False):
+def matchFace(collectionId='',face='',input_folder='',path_sep='',img_file='',output_folder='',debug=False):
     stream = io.BytesIO()
     face.save(stream, format='PNG')
     image_binary = stream.getvalue()
@@ -176,39 +176,8 @@ def matchFace(matched_faces, collectionId='',face='',img_file='',debug=False):
         #face.show()
         logging.info('['+img_file+'] Matched person ['+response['FaceMatches'][0]['Face']['ExternalImageId']+'] with similarity '+str(round(response['FaceMatches'][0]['Similarity'],2))+'%')
 
-        #matched_faces.append(response['FaceMatches'][0]['Face']['ExternalImageId'])
-        matched_faces.put(response['FaceMatches'][0]['Face']['ExternalImageId'])
-
-    
-def matchFaces(collectionId='',img_file='',debug=False):
-    ##Match detected faces with existing collection
-
-
-    tic = time.time()
-    ##Get a list of faces from photo 
-    faces=detectFaces(img_file)
-
-    #matched_faces=[]
-    matched_faces=Queue()
-    threads=[]
-
-    #client = boto3.client('rekognition')
-    for face in faces:
-
-        t=Thread(target=matchFace,args=(matched_faces,collectionId,face,img_file,debug))
-        t.start()
-        threads.append(t)
-    
-    for t in threads:
-        t.join(180)
-
-    toc = time.time()
-
-
-    matched_size = matched_faces.qsize()
-    for i in range(matched_size):
-        matched_person = matched_faces.get()
-
+        matched_person = response['FaceMatches'][0]['Face']['ExternalImageId']
+        
         ##creaete person folder if it does not exists yet
         if os.path.exists(output_folder+path_sep+matched_person):
             pass
@@ -216,10 +185,34 @@ def matchFaces(collectionId='',img_file='',debug=False):
             os.mkdir(output_folder+path_sep+matched_person)
 
         shutil.copyfile(input_folder+path_sep+filename,output_folder+path_sep+matched_person+path_sep+filename)
+        
+
+    
+def matchFaces(collectionId='',input_folder='',path_sep="\\",img_file='',output_folder='',debug=False):
+    ##Match detected faces with existing collection
+
+
+    tic = time.time()
+    ##Get a list of faces from photo 
+    faces=detectFaces(input_folder+path_sep+img_file)
+
+    threads=[]
+
+    #client = boto3.client('rekognition')
+    for face in faces:
+
+        t=Thread(target=matchFace,args=(collectionId,face,input_folder,path_sep,img_file,output_folder,debug))
+        t.start()
+        threads.append(t)
+    
+    for t in threads:
+        t.join(180)
+
+    toc = time.time()  
 
 
     #logging.info('['+img_file+'] Face matched completed and found ['+str(len(matched_faces))+'] faces in '+str(round(toc-tic,4))+'sec.')
-    logging.info('['+img_file+'] Face matched completed and found ['+str(matched_faces.qsize())+'] faces in '+str(round(toc-tic,4))+'sec.')
+    logging.info('['+img_file+'] Face matched completed in '+str(round(toc-tic,4))+'sec.')
 
 #    return matched_faces
 
@@ -275,29 +268,20 @@ if __name__ == "__main__":
 
     toc=time.time()
     logging.info('All faces added to collect in '+str(round(toc-tic,4))+'sec.')
+    
+    time.sleep(5)
 
     ##Now detect faces from photo collection and put them into identified person folder(s)
     directory = os.fsencode(input_folder)
     threads=[]
     for file in os.listdir(directory):
         filename = os.fsdecode(file)  
-        matched_faces=[] 
+        #matched_faces=[] 
         if filename.endswith(".jpeg") or filename.endswith(".jpg"): 
-            matched_faces=matchFaces('faceCollection',input_folder+path_sep+filename)
+            #matched_faces=matchFaces('faceCollection',input_folder+path_sep+filename)
+            matchFaces('faceCollection',input_folder,path_sep,filename,output_folder)
 
-            ##place photo into target folder 
-            #for matched_person in matched_faces:
- #           matched_size = matched_faces.qsize()
- #           for i in range(matched_size):
- #               matched_person = matched_faces.get()
 
-                ##creaete person folder if it does not exists yet
- #               if os.path.exists(output_folder+path_sep+matched_person):
- #                   pass
- #               else:
- #                   os.mkdir(output_folder+path_sep+matched_person)
-
-                #shutil.copyfile(input_folder+path_sep+filename,output_folder+path_sep+matched_person+path_sep+filename)
 
     ##Remove the face collection 
-    removeCollection('faceCollection')
+    #removeCollection('faceCollection')
