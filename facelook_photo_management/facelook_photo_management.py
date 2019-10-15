@@ -10,7 +10,7 @@ from botocore.exceptions import ClientError
 ##Import modules for multi-thread and general OS utilities
 import logging,time, io, os, shutil
 from threading import Thread
-#from multiprocessing import Queue
+from argparse import ArgumentParser
 
 ##Import mode for image processing, **Need additional PIP install 
 from PIL import Image#, ImageDraw, ExifTags, ImageColor
@@ -160,13 +160,19 @@ def detectFaces(img='',debug=False):
 
     return faces
 
-def matchFace(collectionId='',face='',input_folder='',path_sep='',img_file='',output_folder='',debug=False):
+def matchFace(collectionId='',face='',input_folder='',path_sep='',img_file='',output_folder='',threshold=70,debug=False):
     stream = io.BytesIO()
     face.save(stream, format='PNG')
     image_binary = stream.getvalue()
 
     client = boto3.client('rekognition')
-    response = client.search_faces_by_image(CollectionId=collectionId,Image={'Bytes': image_binary},MaxFaces=123)
+
+    try:
+        response = client.search_faces_by_image(CollectionId=collectionId,FaceMatchThreshold=threshold,Image={'Bytes': image_binary},MaxFaces=123)
+    except:
+        if debug:
+            face.show() 
+        return 
 
     if debug:
         print (response['FaceMatches'])
@@ -184,24 +190,24 @@ def matchFace(collectionId='',face='',input_folder='',path_sep='',img_file='',ou
         else:
             os.mkdir(output_folder+path_sep+matched_person)
 
-        shutil.copyfile(input_folder+path_sep+filename,output_folder+path_sep+matched_person+path_sep+filename)
+        shutil.copyfile(input_folder+path_sep+img_file,output_folder+path_sep+matched_person+path_sep+img_file)
         
 
     
-def matchFaces(collectionId='',input_folder='',path_sep="\\",img_file='',output_folder='',debug=False):
+def matchFaces(collectionId='',input_folder='',path_sep="\\",img_file='',output_folder='',threshold=70,debug=False):
     ##Match detected faces with existing collection
 
 
     tic = time.time()
     ##Get a list of faces from photo 
-    faces=detectFaces(input_folder+path_sep+img_file)
+    faces=detectFaces(input_folder+path_sep+img_file,debug=debug)
 
     threads=[]
 
     #client = boto3.client('rekognition')
     for face in faces:
 
-        t=Thread(target=matchFace,args=(collectionId,face,input_folder,path_sep,img_file,output_folder,debug))
+        t=Thread(target=matchFace,args=(collectionId,face,input_folder,path_sep,img_file,output_folder,threshold,debug))
         t.start()
         threads.append(t)
     
@@ -225,10 +231,36 @@ def isWindows():
 ##Main routine
 if __name__ == "__main__":
     
-    ##parameters defaults
-    input_folder='./in_photo/'
-    input_face_folder = './in_face/'
-    output_folder='./out_photo'
+    overall_tic=time.time() 
+
+    ##input arguements defaults
+    #input_folder='./in_photo/'
+    #input_face_folder = './in_face/'
+    #output_folder='./out_photo'
+    #threshold=70
+
+    #Parse input arguements
+    parser = ArgumentParser(prog="facelook",description="Using AWS Rekcognition service to sort photo by invidial matched face (person)",usage="Use face recongnition to management photos")
+
+    ##Configure input arguements 
+    parser.add_argument("--input_folder", default='./in_photo/', type=str, help="Folder path for photos to be process.")
+    parser.add_argument("--input_face_folder", default='./in_face/', type=str, help="Folder path face photo. Filename will be used as face reference ID")
+    parser.add_argument("--output_folder", default='./out_photo/', type=str, help="Output folder")
+    parser.add_argument("--threshold", default=85, type=int, help="Threshold face similarity match") 
+   
+    args = parser.parse_args()
+
+    if args.input_folder is not None:
+        input_folder=args.input_folder
+    if args.input_face_folder is not None:
+        input_face_folder=args.input_face_folder
+    if args.output_folder is not None:
+        output_folder=args.output_folder
+    if args.threshold is not None:
+        threshold=args.threshold
+        
+
+
     
     ##determine OS platform to define path separator 
     if isWindows():
@@ -269,19 +301,25 @@ if __name__ == "__main__":
     toc=time.time()
     logging.info('All faces added to collect in '+str(round(toc-tic,4))+'sec.')
     
-    time.sleep(5)
+    #time.sleep(3)
 
     ##Now detect faces from photo collection and put them into identified person folder(s)
     directory = os.fsencode(input_folder)
     threads=[]
     for file in os.listdir(directory):
         filename = os.fsdecode(file)  
-        #matched_faces=[] 
         if filename.endswith(".jpeg") or filename.endswith(".jpg"): 
-            #matched_faces=matchFaces('faceCollection',input_folder+path_sep+filename)
-            matchFaces('faceCollection',input_folder,path_sep,filename,output_folder)
+            
+            #matchFaces('faceCollection',input_folder,path_sep,filename,output_folder)
+            t=Thread(target=matchFaces,args=('faceCollection',input_folder,path_sep,filename,output_folder,threshold))
+            t.start()
+            threads.append(t)
+    
+    for t in threads:
+        t.join(60)
 
 
-
+    overall_toc=time.time()
+    logging.info('Process completed in '+str(round(overall_toc-overall_tic,2))+' sec.')
     ##Remove the face collection 
     #removeCollection('faceCollection')
