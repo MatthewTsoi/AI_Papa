@@ -25,10 +25,42 @@ Alternatively, you can install these with below 2 command
 pip install Pillow
 pip install boto3
 ```
+- [x] Last, you need to prepare faces of your friends in a fold (named input_face_folder as parameter) 
 
 #### A note of virtual environment, 
 It is recommanded to run piece of code under separate python virtual environment. Learn more about this [documentation] (https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/) 
 
+#### Prepare for the "faces"
+Before we can create copies for individuals. We need to prepare a photo of that person with name as file name. 
+
+For example, if you want to index your friend "Donald", you need to have his photo (the one and only one face on the photo!) as donanld.jpg. You can directly crop from existing photo with minimum resultion of 40x40 pixels.  
+Detail can be find on AWS [limitation page](https://en.wikipedia.org/wiki/File:Donald_Trump_official_portrait.jpg) 
+
+
+![donald.jpg](https://en.wikipedia.org/wiki/Donald_Trump#/media/File:Donald_Trump_official_portrait.jpg?raw=true "Title")
+
+
+
+
+
+## Usage
+```
+usage: Use face recongnition to management photos
+
+Using AWS Rekcognition service to sort photo by invidial matched face (person)
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --input_folder INPUT_FOLDER
+                        Folder path for photos to be process.
+  --input_face_folder INPUT_FACE_FOLDER
+                        Folder path face photo. Filename will be used as face
+                        reference ID
+  --output_folder OUTPUT_FOLDER
+                        Output folder
+  --threshold THRESHOLD
+                        Threshold face similarity match
+```
 
 
 
