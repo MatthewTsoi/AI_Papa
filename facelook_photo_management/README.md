@@ -70,7 +70,46 @@ optional arguments:
   --threshold THRESHOLD
                         Threshold face similarity match
 ```
+## Sample execution
+I have included a detail logging during execution. And you will find even all AWS API response in the log file (facelook_photo_management.log)! 
 
+```bash
+(facelook_photo_management) Matthew$ python facelook_photo_management.py 
+root        : INFO     Logger started!
+root        : INFO     Attempting to delete collection faceCollection
+botocore.credentials: INFO     Found credentials in shared credentials file: ~/.aws/credentials
+root        : INFO     Operation returned Status Code: 200
+root        : INFO     Creating face index collection [faceCollection]
+root        : INFO     Collection ARN: aws:rekognition:us-east-1:275835853639:collection/faceCollection
+root        : INFO     Status code: 200
+root        : INFO     Collection created successfully!
+root        : INFO     [./in_face//boris.jpg] Reading image file: ./in_face//boris.jpg
+root        : INFO     [./in_face//donald.jpg] Reading image file: ./in_face//donald.jpg
+root        : INFO     2 threads started for face index processing.
+root        : INFO     [./in_face//boris.jpg] Add face completed. Processing time: 2.75 sec.
+root        : INFO     [./in_face//boris.jpg]  Face signature: 0bbbb829-a8b0-43cc-a308-d027e7dadffd
+root        : INFO     [./in_face//boris.jpg]  Face ID: boris
+root        : INFO     [./in_face//boris.jpg]  Confidence: 99.99998474121094
+root        : INFO     [./in_face//donald.jpg] Add face completed. Processing time: 3.56 sec.
+root        : INFO     [./in_face//donald.jpg]  Face signature: ec242bb4-7641-4fac-8fef-438610ea1c1c
+root        : INFO     [./in_face//donald.jpg]  Face ID: donald
+root        : INFO     [./in_face//donald.jpg]  Confidence: 100.0
+root        : INFO     All faces added to collect in 3.5661sec.
+root        : INFO     [./in_photo//gathering_00003.jpg] Face detection completed. 2 faces detected in 3.2268sec.
+root        : INFO     [./in_photo//gathering_00001.jpg] Face detection completed. 8 faces detected in 3.6266sec.
+root        : INFO     [./in_photo//gathering_00002.jpg] Face detection completed. 12 faces detected in 4.1662sec.
+root        : INFO     [./in_photo//gathering_00004.jpg] Face detection completed. 15 faces detected in 4.2519sec.
+root        : INFO     [gathering_00003.jpg] Matched person [donald] with similarity 96.44%
+root        : INFO     [gathering_00003.jpg] Matched person [boris] with similarity 99.84%
+root        : INFO     [gathering_00003.jpg] Face matched completed in 5.0502sec.
+root        : INFO     [gathering_00001.jpg] Matched person [donald] with similarity 99.22%
+root        : INFO     [gathering_00002.jpg] Matched person [donald] with similarity 97.63%
+root        : INFO     [gathering_00001.jpg] Face matched completed in 6.0155sec.
+root        : INFO     [gathering_00004.jpg] Face matched completed in 6.449sec.
+root        : INFO     [gathering_00002.jpg] Face matched completed in 6.7134sec.
+root        : INFO     Process completed in 12.85 sec.
+
+```
 ## Project folder 
 ```bash
 .
