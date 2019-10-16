@@ -1,12 +1,20 @@
 
 import boto3
 import io
+from argparse import ArgumentParser
 from PIL import Image, ImageDraw, ExifTags, ImageColor
 
 if __name__ == "__main__":
 
+    #Parse input arguements
+    parser = ArgumentParser(prog="show detected face",description="Using AWS Rekcognition service to identify face in a photo")
+    ##Configure input arguements 
+    parser.add_argument("--input_photo", type=str, help="Photo to identify face.")
+
+    args = parser.parse_args()
+
     # Change photo to the path and filename of your image.
-    photo = '/Users/Matthew/Desktop/test_2.jpg'
+    photo = args.input_photo
 
     # Open image and get image data from stream.
     image = Image.open(open(photo,'rb'))
@@ -49,7 +57,7 @@ if __name__ == "__main__":
             (left, top)
 
         )
-        draw.line(points, fill='#00d400', width=5)
+        draw.line(points, fill='#00d400', width=8)
 
         # Alternatively can draw rectangle. However you can't set line width.
         # draw.rectangle([left,top, left + (width * box['Width']), top +(height * box['Height'])], outline='yellow')

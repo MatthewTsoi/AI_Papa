@@ -27,8 +27,6 @@ pip install boto3
 ```
 - [x] Last, you need to prepare faces of your friends in a fold (named input_face_folder as parameter) 
 
-#### A note of virtual environment, 
-It is recommanded to run piece of code under separate python virtual environment. Learn more about this [documentation] (https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/) 
 
 #### Prepare for the "faces"
 Before we can create copies for individuals. We need to prepare a photo of that person with name as file name. 
@@ -37,9 +35,20 @@ For example, if you want to index your friend "Donald", you need to have his pho
 Detail can be find on AWS [limitation page](https://en.wikipedia.org/wiki/File:Donald_Trump_official_portrait.jpg) 
 
 
-![donald.jpg](https://en.wikipedia.org/wiki/Donald_Trump#/media/File:Donald_Trump_official_portrait.jpg?raw=true "Title")
+There is a sample script (_showBoundingBox_faces.py) to verify if the face photo is ok or not. And it display the identified faces as below. 
 
+```
+Matthew$ python3 _showBoundingBox_faces.py --input_photo donald.jpg 
+Detected faces for donald.jpg
+The detected face is between 50 and 68 years old
+{'Width': 0.33377254009246826, 'Height': 0.3336979150772095, 'Left': 0.31624940037727356, 'Top': 0.23058736324310303}
+Left: 712
+Top: 657
+Face Width: 751
+Face Height: 951
+```
 
+<img width="731" alt="donald_boundingbox" src="https://user-images.githubusercontent.com/49335272/66935750-238d2700-f06f-11e9-87d7-bd3fb948e60e.png">
 
 
 
@@ -62,6 +71,33 @@ optional arguments:
                         Threshold face similarity match
 ```
 
+## Project folder 
+```bash
+.
+.
+|_____decribeCollection.py
+|____facelook_photo_management.py
+|____in_photo
+| |____gathering_00004.jpg
+| |____gathering_00002.jpg
+| |____gathering_00003.jpg
+| |____gathering_00001.jpg
+|____in_face
+| |____boris.jpg
+| |____donald.jpg
+|_____showBoundingBox_faces.py
+|____out_photo
+| |____donald
+| | |____gathering_00002.jpg
+| | |____gathering_00003.jpg
+| | |____gathering_00001.jpg
+| |____boris
+| | |____gathering_00003.jpg
+|____README.md
+|____.gitignore
+|____facelook_photo_management.log
+
+```
 
 
 
