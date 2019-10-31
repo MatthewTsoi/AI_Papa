@@ -1,0 +1,11 @@
+
+###Retrieve all available data sources
+
+https://api.data.gov.hk/v1/historical-archive/list-files?category=health&provider=hospital&start=20180101&end=20181231
+
+###Get list of files name available
+
+https://api.data.gov.hk/v1/historical-archive/list-file-versions?url=http%3A%2F%2Fwww.ha.org.hk%2Fopendata%2Faed%2Faedwtdata-en.json&start=20181201&end=20191030
+
+###Request historical data by datetime key 
+https://api.data.gov.hk/v1/historical-archive/get-file?url=http%3A%2F%2Fwww.ha.org.hk%2Fopendata%2Faed%2Faedwtdata-en.json&time=20181225-0300
