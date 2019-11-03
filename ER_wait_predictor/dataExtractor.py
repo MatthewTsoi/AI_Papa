@@ -19,16 +19,18 @@ from pandas.io.json import json_normalize
 if __name__ == "__main__":
     uri= 'http%3A%2F%2Fwww.ha.org.hk%2Fopendata%2Faed%2Faedwtdata-en.json'
     
-    url="https://api.data.gov.hk/v1/historical-archive/list-file-versions?url="+uri+"&start=20191009&end=20191009"
+    url="https://api.data.gov.hk/v1/historical-archive/list-file-versions?url="+uri+"&start=20180101&end=20191009"
     r=requests.get(url)
     data=r.json()
     #print(str(data['timestamps'])) 
 
 
-    df = pd.DataFrame.from_dict(data['timestamps'])
-    print(df.head(5))
+    index_df = pd.DataFrame.from_dict(data['timestamps'])
+    #print(df.head(5))
 
-    for index, row in df.iterrows():
+    df=pd.DataFrame()
+
+    for index, row in index_df.iterrows():
     
         url='https://api.data.gov.hk/v1/historical-archive/get-file?url='
         uri='http%3A%2F%2Fwww.ha.org.hk%2Fopendata%2Faed%2Faedwtdata-en.json'
@@ -41,7 +43,7 @@ if __name__ == "__main__":
 
     #print(df.info())
     print(df.head(200))
-
+    df.to_csv('data.csv',index=False)
 
     
     
