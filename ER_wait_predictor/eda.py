@@ -22,8 +22,8 @@ def loadData(source_path='',nrows=0):
 
 
 # %%Verify data 
-source_df = loadData('/home/matthew/Desktop/GitHub/AI_Papa/AI_Papa/ER_wait_predictor/data.csv')
-source_df2= loadData('/home/matthew/Desktop/GitHub/AI_Papa/AI_Papa/ER_wait_predictor/data2.csv')
+source_df = loadData('/Users/Matthew/Documents/AI_Papa/ER_wait_predictor/data.csv')
+source_df2= loadData('/Users/Matthew/Documents/AI_Papa/ER_wait_predictor/data2.csv')
 
 
 source_df3=source_df2[~source_df2['updateTime'].isin(source_df['updateTime'].unique())]
@@ -71,20 +71,23 @@ plot_df.plot(x='updateTime',y='Wait Time order')
 
 
 # %%data exploration
-source_df.info()
-print('Hospital count:' +str(len(source_df.hospName.unique()))) 
+#source_df.info()
+#print('Hospital count:' +str(len(source_df.hospName.unique()))) 
 
 source_df['updateTime_dow']= source_df.updateTime.dt.day_name()
 
-print(source_df.head(10))
-source_df.info()
 
-
-source_df.groupby(['updateTime_dow']).avg(['Wait Time order'])
+#source_df.head(10)
 #print(source_df.updateTime.max()) 
 #print(source_df.updateTime.min()) 
 #print(source_df.tail(10).updateTime)
+pd.set_option('display.max_rows', 2000)
+#wait_dow_df=source_df.groupby(by=['updateTime_dow'])['updateTime_dow'].value_counts()
+wait_dow_df=source_df.groupby(by=['updateTime_dow'])['updateTime_dow'].value_counts(sort=True)
+print(wait_dow_df.head(10))
+# %% vislualize data 
 
+import seaborn as sns
 
+sns.distplot(wait_dow_df)
 # %%
-source_df.sort_values(by=['updateTime']).tail(50)
