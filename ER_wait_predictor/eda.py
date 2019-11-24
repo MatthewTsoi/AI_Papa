@@ -51,6 +51,7 @@ source_df=source_df.drop(columns=['Wait Time'])
 
 
 # %% Data Profiling 
+%time
 print('Num of data points:  '+str(len(source_df.sort_values(by=['updateTime']).updateTime.unique())  ) ) 
 print('Num of ER/hospital: '+str(len(source_df.hospName.unique()))) 
 print('Record count:'+str(len(source_df) ))
@@ -65,6 +66,7 @@ print('Earliest date point:'+str(source_df.updateTime.min()) )
 
 # %%
 
+%time 
 plot_df=source_df[source_df['hospName']=='Queen Mary Hospital']
 #plot_df.plot(x='updateTime',y='Wait Time order')
 plot_df.plot(x='updateTime',y='Wait Time order')
@@ -82,12 +84,35 @@ source_df['updateTime_dow']= source_df.updateTime.dt.day_name()
 #print(source_df.updateTime.min()) 
 #print(source_df.tail(10).updateTime)
 pd.set_option('display.max_rows', 2000)
+source_df.info()
+
+#df2=source_df.groupby(by=['updateTime_dow','topWait']).count()[['hospName']].reset_index()
+#df2.head(500)
+
+source_df.head(10)
+df3=source_df[source_df['hospName']=='Ruttonjee Hospital'].pivot_table(index=['topWait'],values=['hospName'],columns=['updateTime_dow'],aggfunc='count',fill_value=0)
+df3.head(10)
 #wait_dow_df=source_df.groupby(by=['updateTime_dow'])['updateTime_dow'].value_counts()
-wait_dow_df=source_df.groupby(by=['updateTime_dow'])['updateTime_dow'].value_counts(sort=True)
-print(wait_dow_df.head(10))
+#wait_dow_df=source_df.groupby(by=['updateTime_dow'])['topWait'].value_counts(sort=True)
+#print(wait_dow_df.sort_values(['Wait Time order']).head(10))
 # %% vislualize data 
 
 import seaborn as sns
+import matplotlib.pyplot as plt # for data visualization
 
-sns.distplot(wait_dow_df)
+
+#fig, ax = plt.subplots(figsize=(6,6)) 
+
+for hospname in source_df.hospName.unique():
+    #print(hospname)
+    fig, ax = plt.subplots(figsize=(6,6)) 
+    ax.set_title("Wait catagory distribution for "+hospname,fontsize=20,pad=10)
+    df3=source_df[source_df['hospName']==hospname].pivot_table(index=['topWait'],values=['hospName'],columns=['updateTime_dow'],aggfunc='count',fill_value=0).reset_index().rename_axis(None,1)
+    sns.heatmap(df3,fmt='d',cmap="YlGnBu")
+    plt.show()
+#plot_df=df2[df2['updateTime_dow']=='Monday'][['updateTime_dow','hospName']]
+#sns.distplot(source_df[['topWait']].head(2000),kde=False)
+
 # %%
+
+df3.head(10)
