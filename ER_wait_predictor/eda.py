@@ -103,16 +103,28 @@ import matplotlib.pyplot as plt # for data visualization
 
 #fig, ax = plt.subplots(figsize=(6,6)) 
 
+df4=pd.DataFrame()
+
 for hospname in source_df.hospName.unique():
     #print(hospname)
     fig, ax = plt.subplots(figsize=(6,6)) 
     ax.set_title("Wait catagory distribution for "+hospname,fontsize=20,pad=10)
-    df3=source_df[source_df['hospName']==hospname].pivot_table(index=['topWait'],values=['hospName'],columns=['updateTime_dow'],aggfunc='count',fill_value=0).reset_index().rename_axis(None,1)
+    df3=source_df[source_df['hospName']==hospname].pivot_table(index=['topWait'],values=['hospName'],columns=['updateTime_dow'],aggfunc='count',fill_value=0)
+    df3.columns = df3.columns.get_level_values(1)
     sns.heatmap(df3,fmt='d',cmap="YlGnBu")
     plt.show()
+
+    df3['hospName']=hospname
+    df4=df4.append(df3)
 #plot_df=df2[df2['updateTime_dow']=='Monday'][['updateTime_dow','hospName']]
 #sns.distplot(source_df[['topWait']].head(2000),kde=False)
 
 # %%
+df3=source_df.pivot_table(index=['topWait'],values=['hospName'],columns=['updateTime_dow'],aggfunc='count',fill_value=0)  
+df3.columns = df3.columns.get_level_values(1)
+df3.head(9)
 
-df3.head(10)
+# %%
+df4.head(5)
+g = sns.FacetGrid(df4, col="hospName")
+g.map(plt.hist,'Friday')
