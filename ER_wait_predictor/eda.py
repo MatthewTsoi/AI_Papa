@@ -22,8 +22,9 @@ def loadData(source_path='',nrows=0):
 
 
 # %%Verify data 
-source_df = loadData('/Users/Matthew/Documents/AI_Papa/ER_wait_predictor/data.csv')
-source_df2= loadData('/Users/Matthew/Documents/AI_Papa/ER_wait_predictor/data2.csv')
+source_path= '/home/matthew/Desktop/GitHub/AI_Papa/AI_Papa/ER_wait_predictor/'
+source_df = loadData(source_path+'data.csv')
+source_df2= loadData(source_path+'data2.csv')
 
 
 source_df3=source_df2[~source_df2['updateTime'].isin(source_df['updateTime'].unique())]
@@ -100,10 +101,17 @@ df3.head(10)
 import seaborn as sns
 import matplotlib.pyplot as plt # for data visualization
 
+fig, ax = plt.subplots(figsize=(6,6)) 
+ax.set_title("Overall Wait catagory distribution",fontsize=20,pad=10)
+df3=source_df.pivot_table(index=['topWait'],values=['hospName'],columns=['updateTime_dow'],aggfunc='count',fill_value=0)
+df3.columns = df3.columns.get_level_values(1)
+df3= df3.reindex(dow_order , axis=1)
+sns.heatmap(df3,fmt='d',cmap="YlGnBu")
+plt.show()
 
-#fig, ax = plt.subplots(figsize=(6,6)) 
 
 df4=pd.DataFrame()
+dow_order = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
 
 for hospname in source_df.hospName.unique():
     #print(hospname)
@@ -111,20 +119,23 @@ for hospname in source_df.hospName.unique():
     ax.set_title("Wait catagory distribution for "+hospname,fontsize=20,pad=10)
     df3=source_df[source_df['hospName']==hospname].pivot_table(index=['topWait'],values=['hospName'],columns=['updateTime_dow'],aggfunc='count',fill_value=0)
     df3.columns = df3.columns.get_level_values(1)
+    df3= df3.reindex(dow_order , axis=1)
     sns.heatmap(df3,fmt='d',cmap="YlGnBu")
     plt.show()
 
-    df3['hospName']=hospname
-    df4=df4.append(df3)
+    #df3['hospName']=hospname
+    #df4=df4.append(df3)
 #plot_df=df2[df2['updateTime_dow']=='Monday'][['updateTime_dow','hospName']]
 #sns.distplot(source_df[['topWait']].head(2000),kde=False)
 
 # %%
-df3=source_df.pivot_table(index=['topWait'],values=['hospName'],columns=['updateTime_dow'],aggfunc='count',fill_value=0)  
-df3.columns = df3.columns.get_level_values(1)
-df3.head(9)
-
+#df3=source_df.pivot_table(index=['topWait'],values=['hospName'],columns=['updateTime_dow'],aggfunc='count',fill_value=0)  
+#df3.columns = df3.columns.get_level_values(1)
+#df3.head(9)
+df4.head(10)
+df4.info()
+source_df.info()
 # %%
-df4.head(5)
-g = sns.FacetGrid(df4, col="hospName")
-g.map(plt.hist,'Friday')
+
+df3.info()
+sns.barplot(x=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],data=df3);
