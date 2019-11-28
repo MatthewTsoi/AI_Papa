@@ -87,7 +87,7 @@ plot_df.plot(x='updateTime',y='Wait Time order')
 # %%data exploration and expend time dimenion 
 
 def expandTimeDim(df = ''):
-    df['updateTime_dow']= df.updateTime.dt.day_name()
+    df['updateTime_dow']= df.updateTime.dt.dayofweek
     df['updateTime_day']= df.updateTime.dt.day
     df['updateTime_month']= df.updateTime.dt.month
     df['updateTime_hour']= df.updateTime.dt.hour
@@ -144,7 +144,47 @@ if analyzePerHospial:
             plt.show()
 
 
+# %%Prepare the training set and test set 
+
+# Import train_test_split function
+from sklearn.model_selection import train_test_split
+
+
+
+X=source_df[['hospName',  'updateTime_dow', 'updateTime_day','updateTime_month','updateTime_hour']]  # Features
+y=source_df['topWait']  # Labels
+
+X = pd.get_dummies(X,prefix=['hospName'], columns = ['hospName'], drop_first=True)
+
+# Split dataset into training set and test set
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+print("Training data set:"+str(X_train.shape))
+print("Test data set:"+str(X_test.shape))
+# %% Create a RandomForest model 
+
+#Import Random Forest Model
+from sklearn.ensemble import RandomForestClassifier
+
+#Create a Gaussian Classifier
+clf=RandomForestClassifier(n_estimators=100, n_jobs=-1)
+
+#Train the model using the training sets y_pred=clf.predict(X_test)
+clf.fit(X_train,y_train)
+
+y_pred=clf.predict(X_test)
+
+
 # %%
-source_df.head(5)
+
+#Import scikit-learn metrics module for accuracy calculation
+from sklearn import metrics
+# Model Accuracy, how often is the classifier correct?
+print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
+clf.score( X=X_test,y=y_test)
+
+
+# %%
+
 
 # %%
