@@ -17,12 +17,13 @@ def loadData(source_path='',nrows=0):
     #source_df['updateTime']=pd.to_datetime(source_df['updateTime'],dayfirst=True, format='%d/%m/%Y %H:%M%p',infer_datetime_format=True) 
     #source_df['updateTime_org']=source_df['updateTime']
 
-    source_df['updateTime']=source_df['updateTime'].apply(lambda x: datetime.strptime(x, '%d/%m/%Y %H:%M%p'))
+    source_df['updateTime']=source_df['updateTime'].apply(lambda x: datetime.strptime(x, '%d/%m/%Y %I:%M%p'))
     return source_df 
 
 
 # %%Verify data 
-source_path= '/home/matthew/Desktop/GitHub/AI_Papa/AI_Papa/ER_wait_predictor/'
+#source_path= '/home/matthew/Desktop/GitHub/AI_Papa/AI_Papa/ER_wait_predictor/'
+source_path='/Users/Matthew/Documents/AI_Papa/ER_wait_predictor/'
 source_df = loadData(source_path+'data.csv')
 source_df2= loadData(source_path+'data2.csv')
 
@@ -52,90 +53,98 @@ source_df=source_df.drop(columns=['Wait Time'])
 
 
 # %% Data Profiling 
-%time
-print('Num of data points:  '+str(len(source_df.sort_values(by=['updateTime']).updateTime.unique())  ) ) 
+#%time
+print('============DATA PROFILE========================')
+print('Num of timestamps:  '+str(len(source_df.sort_values(by=['updateTime']).updateTime.unique())  ) ) 
 print('Num of ER/hospital: '+str(len(source_df.hospName.unique()))) 
 print('Record count:'+str(len(source_df) ))
 print('Last date point:'+str(source_df.updateTime.max()) )
 print('Earliest date point:'+str(source_df.updateTime.min()) )
+print('=================================================')
+print('************Statistics for numeric columns********')
+print(source_df.describe())
 
+print('**************************************************')
 
+print('##############Missing values######################')
+for col in source_df.columns:
+    print("Null value count for ["+col+"]: "+str(source_df[col].isna().sum()))
+
+print('##################################################')
 #print(source_df.updateTime.tail(10)) 
 #print(source_df.sort_values(by=['updateTime']).updateTime.tail(10)) 
 #source_df.info()
 #print(source_df.head(5))
 
-# %%
+# %% Simple plot to validate the wait time outline 
 
-%time 
+#%time 
 plot_df=source_df[source_df['hospName']=='Queen Mary Hospital']
 #plot_df.plot(x='updateTime',y='Wait Time order')
 plot_df.plot(x='updateTime',y='Wait Time order')
 
 
-# %%data exploration
-#source_df.info()
-#print('Hospital count:' +str(len(source_df.hospName.unique()))) 
+# %%data exploration and expend time dimenion 
 
-source_df['updateTime_dow']= source_df.updateTime.dt.day_name()
+def expandTimeDim(df = ''):
+    df['updateTime_dow']= df.updateTime.dt.day_name()
+    df['updateTime_day']= df.updateTime.dt.day
+    df['updateTime_month']= df.updateTime.dt.month
+    df['updateTime_hour']= df.updateTime.dt.hour
+    return df
+
+source_df=expandTimeDim(source_df)
 
 
-#source_df.head(10)
-#print(source_df.updateTime.max()) 
-#print(source_df.updateTime.min()) 
-#print(source_df.tail(10).updateTime)
 pd.set_option('display.max_rows', 2000)
 source_df.info()
 
-#df2=source_df.groupby(by=['updateTime_dow','topWait']).count()[['hospName']].reset_index()
-#df2.head(500)
-
-source_df.head(10)
 df3=source_df[source_df['hospName']=='Ruttonjee Hospital'].pivot_table(index=['topWait'],values=['hospName'],columns=['updateTime_dow'],aggfunc='count',fill_value=0)
 df3.head(10)
-#wait_dow_df=source_df.groupby(by=['updateTime_dow'])['updateTime_dow'].value_counts()
-#wait_dow_df=source_df.groupby(by=['updateTime_dow'])['topWait'].value_counts(sort=True)
-#print(wait_dow_df.sort_values(['Wait Time order']).head(10))
-# %% vislualize data 
+
+# %% vislualize data in different dimension
 
 import seaborn as sns
 import matplotlib.pyplot as plt # for data visualization
 
-fig, ax = plt.subplots(figsize=(6,6)) 
-ax.set_title("Overall Wait catagory distribution",fontsize=20,pad=10)
-df3=source_df.pivot_table(index=['topWait'],values=['hospName'],columns=['updateTime_dow'],aggfunc='count',fill_value=0)
-df3.columns = df3.columns.get_level_values(1)
-df3= df3.reindex(dow_order , axis=1)
-sns.heatmap(df3,fmt='d',cmap="YlGnBu")
-plt.show()
-
+##Change to True for analysis per hospital 
+analyzePerHospial=False
 
 df4=pd.DataFrame()
 dow_order = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+time_dims=['dow','day','month','hour']
 
-for hospname in source_df.hospName.unique():
-    #print(hospname)
+for time_dim in time_dims:
+    time_prespective = 'updateTime_'+time_dim
+
+    ## Plot per day of week 
     fig, ax = plt.subplots(figsize=(6,6)) 
-    ax.set_title("Wait catagory distribution for "+hospname,fontsize=20,pad=10)
-    df3=source_df[source_df['hospName']==hospname].pivot_table(index=['topWait'],values=['hospName'],columns=['updateTime_dow'],aggfunc='count',fill_value=0)
+    ax.set_title("Overall wait dist. per "+time_dim,fontsize=20,pad=10)
+    df3=source_df.pivot_table(index=['topWait'],values=['hospName'],columns=[time_prespective],aggfunc='count',fill_value=0)
     df3.columns = df3.columns.get_level_values(1)
-    df3= df3.reindex(dow_order , axis=1)
+    if time_dim == 'dow':
+        df3= df3.reindex(dow_order , axis=1)
     sns.heatmap(df3,fmt='d',cmap="YlGnBu")
     plt.show()
 
-    #df3['hospName']=hospname
-    #df4=df4.append(df3)
-#plot_df=df2[df2['updateTime_dow']=='Monday'][['updateTime_dow','hospName']]
-#sns.distplot(source_df[['topWait']].head(2000),kde=False)
+
+if analyzePerHospial:
+
+    for time_dim in time_dims:
+        time_prespective = 'updateTime_'+time_dim
+        for hospname in source_df.hospName.unique():
+
+            fig, ax = plt.subplots(figsize=(3,3)) 
+            ax.set_title("Wait catagory dist. for "+hospname+' per '+time_dim,fontsize=9,pad=5)
+            df3=source_df[source_df['hospName']==hospname].pivot_table(index=['topWait'],values=['hospName'],columns=[time_prespective],aggfunc='count',fill_value=0)
+            df3.columns = df3.columns.get_level_values(1)
+            if time_dim == 'dow':
+                df3= df3.reindex(dow_order , axis=1)
+            sns.heatmap(df3,fmt='d',cmap="YlGnBu")
+            plt.show()
+
 
 # %%
-#df3=source_df.pivot_table(index=['topWait'],values=['hospName'],columns=['updateTime_dow'],aggfunc='count',fill_value=0)  
-#df3.columns = df3.columns.get_level_values(1)
-#df3.head(9)
-df4.head(10)
-df4.info()
-source_df.info()
-# %%
+source_df.head(5)
 
-df3.info()
-sns.barplot(x=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],data=df3);
+# %%
