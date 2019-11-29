@@ -22,8 +22,8 @@ def loadData(source_path='',nrows=0):
 
 
 # %%Verify data 
-#source_path= '/home/matthew/Desktop/GitHub/AI_Papa/AI_Papa/ER_wait_predictor/'
-source_path='/Users/Matthew/Documents/AI_Papa/ER_wait_predictor/'
+source_path= '/home/matthew/Desktop/GitHub/AI_Papa/AI_Papa/ER_wait_predictor/'
+#source_path='/Users/Matthew/Documents/AI_Papa/ER_wait_predictor/'
 source_df = loadData(source_path+'data.csv')
 source_df2= loadData(source_path+'data2.csv')
 
@@ -163,16 +163,28 @@ print("Training data set:"+str(X_train.shape))
 print("Test data set:"+str(X_test.shape))
 # %% Create a RandomForest model 
 
+%time 
+
+import time 
 #Import Random Forest Model
 from sklearn.ensemble import RandomForestClassifier
 
 #Create a Gaussian Classifier
-clf=RandomForestClassifier(n_estimators=100, n_jobs=-1)
+clf=RandomForestClassifier(n_estimators=1000, n_jobs=-1)
 
+tic=time.time() 
 #Train the model using the training sets y_pred=clf.predict(X_test)
 clf.fit(X_train,y_train)
 
+toc=time.time()
+
+print('training time:'+str(round(toc-tic,2)))
+
+tic=time.time() 
 y_pred=clf.predict(X_test)
+toc=time.time()
+
+print('prediction time:'+str(round(toc-tic,2)))
 
 
 # %%
@@ -181,10 +193,10 @@ y_pred=clf.predict(X_test)
 from sklearn import metrics
 # Model Accuracy, how often is the classifier correct?
 print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
-clf.score( X=X_test,y=y_test)
+print(str(round(clf.score( X=X_test,y=y_test)*100,4))+'%' ) 
 
 
 # %%
-
+clf
 
 # %%
