@@ -26,14 +26,16 @@ def loadData(source_path='',nrows=0):
 source_path='/Users/Matthew/Documents/AI_Papa/ER_wait_predictor/'
 source_df = loadData(source_path+'data.csv')
 source_df2= loadData(source_path+'data2.csv')
-
-
 source_df3=source_df2[~source_df2['updateTime'].isin(source_df['updateTime'].unique())]
-
-#print(len(source_df3.updateTime))
-#print(len(source_df2.updateTime))
-
 source_df=source_df.append(source_df3)
+
+
+source_df2= loadData(source_path+'data3.csv')
+source_df3=source_df2[~source_df2['updateTime'].isin(source_df['updateTime'].unique())]
+source_df=source_df.append(source_df3)
+
+source_df2=''
+source_df3=''
 
 print(source_df.info())
 print('Max wait record:'+str(source_df.updateTime.max()) )
@@ -88,6 +90,7 @@ plot_df.plot(x='updateTime',y='Wait Time order')
 
 def expandTimeDim(df = ''):
     df['updateTime_dow']= df.updateTime.dt.dayofweek
+    df['updateTime_dayname']= df.updateTime.dt.day_name()
     df['updateTime_day']= df.updateTime.dt.day
     df['updateTime_month']= df.updateTime.dt.month
     df['updateTime_hour']= df.updateTime.dt.hour
@@ -112,7 +115,7 @@ analyzePerHospial=False
 
 df4=pd.DataFrame()
 dow_order = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
-time_dims=['dow','day','month','hour']
+time_dims=['dayname','day','month','hour']
 
 for time_dim in time_dims:
     time_prespective = 'updateTime_'+time_dim
@@ -122,11 +125,11 @@ for time_dim in time_dims:
     ax.set_title("Overall wait dist. per "+time_dim,fontsize=20,pad=10)
     df3=source_df.pivot_table(index=['topWait'],values=['hospName'],columns=[time_prespective],aggfunc='count',fill_value=0)
     df3.columns = df3.columns.get_level_values(1)
-    if time_dim == 'dow':
+    if time_dim == 'dayname':
         df3= df3.reindex(dow_order , axis=1)
     sns.heatmap(df3,fmt='d',cmap="YlGnBu")
     plt.show()
-
+    #print(df3.head(10))
 
 if analyzePerHospial:
 
@@ -157,21 +160,27 @@ y=source_df['topWait']  # Labels
 X = pd.get_dummies(X,prefix=['hospName'], columns = ['hospName'], drop_first=True)
 
 # Split dataset into training set and test set
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1)
 
 print("Training data set:"+str(X_train.shape))
 print("Test data set:"+str(X_test.shape))
 # %% Create a RandomForest model 
 
+import time 
+
 #Import Random Forest Model
 from sklearn.ensemble import RandomForestClassifier
 
 #Create a Gaussian Classifier
-clf=RandomForestClassifier(n_estimators=100, n_jobs=-1)
+clf=RandomForestClassifier(n_estimators=50, n_jobs=3)
 
+tic = time.time() 
 #Train the model using the training sets y_pred=clf.predict(X_test)
 clf.fit(X_train,y_train)
 
+toc = time.time() 
+
+print('Training time:'+str(round(toc-tic,2))+"s")
 y_pred=clf.predict(X_test)
 
 
@@ -180,11 +189,9 @@ y_pred=clf.predict(X_test)
 #Import scikit-learn metrics module for accuracy calculation
 from sklearn import metrics
 # Model Accuracy, how often is the classifier correct?
-print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
-clf.score( X=X_test,y=y_test)
+print("Accuracy:"+str(round(clf.score( X=X_test,y=y_test),4)*100)+"%")
 
 
-# %%
 
 
 # %%
