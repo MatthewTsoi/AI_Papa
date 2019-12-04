@@ -34,6 +34,12 @@ source_df2= loadData(source_path+'data3.csv')
 source_df3=source_df2[~source_df2['updateTime'].isin(source_df['updateTime'].unique())]
 source_df=source_df.append(source_df3)
 
+
+source_df2= loadData(source_path+'data4.csv')
+source_df3=source_df2[~source_df2['updateTime'].isin(source_df['updateTime'].unique())]
+source_df=source_df.append(source_df3)
+
+
 source_df2=''
 source_df3=''
 
@@ -147,6 +153,11 @@ if analyzePerHospial:
             plt.show()
 
 
+#
+# %%Feature engineering 
+source_df.info()
+
+
 # %%Prepare the training set and test set 
 
 # Import train_test_split function
@@ -160,7 +171,7 @@ y=source_df['topWait']  # Labels
 X = pd.get_dummies(X,prefix=['hospName'], columns = ['hospName'], drop_first=True)
 
 # Split dataset into training set and test set
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.15)
 
 print("Training data set:"+str(X_train.shape))
 print("Test data set:"+str(X_test.shape))
@@ -172,7 +183,7 @@ import time
 from sklearn.ensemble import RandomForestClassifier
 
 #Create a Gaussian Classifier
-clf=RandomForestClassifier(n_estimators=50, n_jobs=3)
+clf=RandomForestClassifier(n_estimators=100, n_jobs=6)
 
 tic = time.time() 
 #Train the model using the training sets y_pred=clf.predict(X_test)
@@ -194,4 +205,21 @@ print("Accuracy:"+str(round(clf.score( X=X_test,y=y_test),4)*100)+"%")
 
 
 
+# %% Save the random forest model to file for re-use 
+
+import pickle as pk
+
+with open('./ER_wait_predictor/ER_predictor.dump', 'wb') as f:
+    pk.dump(clf, f)
+
+
+
+
+# %% [optional] load the random forest model and perform prediction
+
+clf_load = pk.load(open('./ER_wait_predictor/ER_predictor.dump', 'rb'))
+print("Accuracy:"+str(round(clf_load.score( X=X_test,y=y_test),4)*100)+"%")
+
+clf_load=''
+clf=''
 # %%
