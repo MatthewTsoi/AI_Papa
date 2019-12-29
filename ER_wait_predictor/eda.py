@@ -13,42 +13,22 @@ def loadData(source_path='',nrows=0):
 
     source_df['topWait']=source_df['topWait'].astype('category')
     source_df['hospName']=source_df['hospName'].astype('category')
-    #3/4/2019 6:45am (3rd Apr 2019)
-    #source_df['updateTime']=pd.to_datetime(source_df['updateTime'],dayfirst=True, format='%d/%m/%Y %H:%M%p',infer_datetime_format=True) 
-    #source_df['updateTime_org']=source_df['updateTime']
-
-    source_df['updateTime']=source_df['updateTime'].apply(lambda x: datetime.strptime(x, '%d/%m/%Y %I:%M%p'))
+    
+    #source_df['updateTime']=source_df['updateTime'].apply(lambda x: datetime.strptime(x, '%d/%m/%Y %I:%M%p'))
+    source_df['updateTime']=source_df['updateTime'].apply(lambda x: datetime.strptime(x, '%Y-%m-%d %H:%M:%S'))
     return source_df 
 
 
 # %%Verify data 
-#source_path= '/home/matthew/Desktop/GitHub/AI_Papa/AI_Papa/ER_wait_predictor/'
-source_path='/Users/Matthew/Documents/AI_Papa/ER_wait_predictor/'
-source_df = loadData(source_path+'data.csv')
-source_df2= loadData(source_path+'data2.csv')
-source_df3=source_df2[~source_df2['updateTime'].isin(source_df['updateTime'].unique())]
-source_df=source_df.append(source_df3)
+source_path='./ER_wait_predictor/'
 
 
-source_df2= loadData(source_path+'data3.csv')
-source_df3=source_df2[~source_df2['updateTime'].isin(source_df['updateTime'].unique())]
-source_df=source_df.append(source_df3)
-
-
-source_df2= loadData(source_path+'data4.csv')
-source_df3=source_df2[~source_df2['updateTime'].isin(source_df['updateTime'].unique())]
-source_df=source_df.append(source_df3)
-
-
-source_df2=''
-source_df3=''
-
+source_df=loadData(source_path+'source_data.csv')
 print(source_df.info())
+
 print('Max wait record:'+str(source_df.updateTime.max()) )
 print('Min wait record:'+str(source_df.updateTime.min()) )
 print('Record count:'+str(len(source_df) ))
-
-
 
 
 
@@ -79,10 +59,7 @@ for col in source_df.columns:
     print("Null value count for ["+col+"]: "+str(source_df[col].isna().sum()))
 
 print('##################################################')
-#print(source_df.updateTime.tail(10)) 
-#print(source_df.sort_values(by=['updateTime']).updateTime.tail(10)) 
-#source_df.info()
-#print(source_df.head(5))
+
 
 # %% Simple plot to validate the wait time outline 
 
@@ -171,7 +148,7 @@ y=source_df['topWait']  # Labels
 X = pd.get_dummies(X,prefix=['hospName'], columns = ['hospName'], drop_first=True)
 
 # Split dataset into training set and test set
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.15)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1)
 
 print("Training data set:"+str(X_train.shape))
 print("Test data set:"+str(X_test.shape))
