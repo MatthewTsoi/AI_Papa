@@ -1,0 +1,134 @@
+Upon the onboarding of a scheme to the eMPF Platform, the administration of the scheme will be performed by the eMPF Platform. Participating employers and scheme members of the scheme are immediately required to manage their MPF accounts through the eMPF Platform and submit their MPF administration instructions to the Platform for processing.Upon onboarding of an MPF scheme to the eMPF Platform, all employers and scheme members of the scheme are required to register with the eMPF Platform to obtain an eMPF ID and user credentials for future logins to the eMPF Platform to manage their MPF accounts electronically.We strongly recommend employers and scheme members to manage their MPF accounts through digital means. However, employers and scheme members, if they prefer, can still submit their MPF related instructions to the eMPF Platform in paper form via different means (e.g. by post, fax, email to designated contact address or number, or in person to drop-in box at any of the eMPF Service Centres).
+
+From the onboarding date onwards, administrative services of an MPF scheme will be performed by the eMPF Platform instead of the trustee. Information and records of an MPF account under the scheme will be transferred to the eMPF Platform. This includes all types of accounts, such as employees’ contribution accounts, tax-deductible voluntary contribution accounts, special voluntary contribution accounts, personal accounts etc.
+
+The eMPF Platform’s fully automated, digitalized one-stop design, coupled with the "cost recovery" operation principle, sets to reduce the administration cost of MPF. The "straight pass-on" requirement of the MPF legislation stipulated that administration fee of MPF schemes charged by the trustees must not exceed the Platform fees they pay to the eMPF Platform Company, so the cost savings will be "passed straight on", leading to a corresponding reduction by the trustees in their overall fees and charges, which will benefit MPF scheme members directly.
+
+All employers and members have to submit MPF administration instructions to the eMPF Platform after their participating scheme is onboarded to the eMPF Platform.
+
+You are required to submit MPF administration instructions to the eMPF Platform for processing.
+
+You should start managing your MPF accounts through the eMPF Platform from the date on which the MPF scheme that you are participating in onboards to the eMPF Platform. You may find the onboarding schedule of the schemes on the eMPF website.
+
+Trustees are required to properly carry out their fiduciary duties (including duty of prudence, duty of diversification, duty of loyalty and duty of compliance) and act in the best interest of scheme members. These duties remain unchanged after the launch of the eMPF Platform.
+
+The eMPF Platform (including both eMPF Web Portal and eMPF Mobile App) operates on a 24/7 basis.
+
+The eMPF Platform is provided in the form of web portal and mobile application. Given the appropriate configurations and setting of the users’ devices, the eMPF Platform can be operated regardless of geographic locations.
+
+The service pledge of various services of the eMPF Platform are published on the eMPF website.
+
+All MPF schemes, including Industry Schemes, will be onboarded to the eMPF Platform according to the onboarding schedule.
+
+Only MPF schemes will be onboarded to the eMPF Platform. ORSO trustees/administrators can make use of the eMPF Platform to transfer benefits from ORSO schemes to MPF schemes. Other than that, ORSO scheme administration will not be supported by the eMPF Platform.
+
+The e-Enquiry of Personal Account (ePA) and the eMPF Platform are two completely different digital applications. Users of ePA have to register with the eMPF Platform separately so as to use the functions of the eMPF Platform.
+
+You can ask your intermediary or representative, e.g. family member, to fill in the e-form online via the eMPF Assistant Portal. You will then be able to review and verify the e-form prepared by them and submit it on the eMPF Member Portal.
+
+There is no special browser setting for accessing the eMPF Platform. You can use the latest version of Microsoft Edge, Mozilla Firefox, Safari or Google Chrome to access the eMPF Platform, and you are required to enable JavaScript and allow cookies on your browser.
+
+The eMPF Mobile App is launched now. You can download the eMPF Mobile App from Apple App Store, Google Play Store or HUAWEI App Gallery, the eMPF Mobile App supports devices with current support for security updates (minimum system requirement: Android 12.0, EMUI 13/14, HarmonyOS 4 or iOS 15.0).
+
+Trustees and their schemes will get onboard the eMPF Platform in sequence one by one (details - www.empf.org.hk). After your other scheme has got onboard, your account information of that scheme will be automatically shown on the eMPF Platform.
+
+There is no charge for registering and using the eMPF Platform.
+
+If you attempt to open the eMPF Mobile App and it pops up with this notification, it could indicate that your device may have suspicious applications from unofficial sources installed that pose a potential security risk, including granted excessive access. We advise you to take actions to continue using the eMPF Mobile App. Remove the applications with potential security risk: The eMPF Mobile App will be accessible only after the relevant applications have been removed
+
+You can register online on the eMPF website or eMPF Mobile App. It takes just 3 simple steps to complete the registration: identity verification, provision of personal information, and setting up of username and password. To ensure smooth registration with the eMPF Platform, please have the following items ready:
+ 1. HKID card 2. Personal mobile phone 3. Email address. If you are an "iAM Smart" user, you can perform identity verification with "iAM Smart" directly during registration.
+
+Members are recommended to register with the eMPF Platform upon the MPF scheme in which they are participating onboards to the Platform, so that they will be able to access their account details immediately.
+
+In general, online member registration will be completed instantly. The registration status will be shown after you have submitted the registration request. You can immediately view and manage your MPF account(s) for the onboarded scheme(s) once you have activated your eMPF.
+
+eMPF ID is a single personal ID assigned to a member after eMPF registration. It allows the eMPF Platform to identify you, and link up all of your MPF accounts on the eMPF Platform, including existing accounts and accounts to be opened in future. MPF account number is a scheme-specific number. You will have your own account number for each of your enrolled MPF schemes.
+
+Once you have completed the eMPF registration on the eMPF Platform, your eMPF ID will be shown on the acknowledgment page instantly.
+
+If your HKID card shows only the year of birth, you should use the last day of the year as shown on the HKID card (i.e. 31 December) as your date of birth. If your HKID card shows only the year and month of birth, you should use the last day of the month as your date of birth.
+
+After successful registration and activation of your eMPF, the MPF account details of the participating schemes which are onboarded to the eMPF Platform will be available immediately. You can start managing your MPF via the eMPF Platform.
+
+After your employer has enrolled you into an MPF scheme via the eMPF Platform, you will receive a notification email for you to complete the scheme enrolment and eMPF registration processes. You will be required to perform identity verification, provide personal information, indicate your investment choice, and submit the details to the eMPF Platform for processing. Upon successful enrolment, you can continue to complete the eMPF registration by setting up the eMPF username and password.
+
+We understand that you might have enrolled in an MPF account with your passport. However, the eMPF Platform does not support registration by passport. You are recommended to register with eMPF using your HKID and update the identity document with the trustee of the current scheme. If you do not have a HKID, please contact the Immigration Department for further information and to register for a HKID.
+
+A communication pack with a "Notice to participating Employers and Scheme Members of the Scheme" will be sent by the trustee to the scheme participating members before the onboarding of the MPF scheme. The onboarding date of the MPF scheme and important information about onboarding, such as the cut-off date for trustee/sponsor to receive MPF administration instructions, the registration start day etc. will be provided in the communication pack.
+
+A member’s MPF accounts under the same MPF scheme or different MPF schemes will not be consolidated into one account after all the MPF schemes are onboarded to the eMPF Platform. The eMPF Platform allows you to access and manage all your MPF accounts with a single login.
+
+A new account number will be assigned to your existing MPF accounts after the scheme in which you are participating is onboarded to the eMPF Platform. Members can log in to the eMPF Platform, click "My Account" > "Profile Management" > "MPF Account Management", then choose the relevant scheme to view the account information. Members can also call the eMPF Customer Service Hotline 1832622. 
+
+Your account details will only be available on the eMPF Platform after the MPF scheme in which you are participating is onboarded to the eMPF Platform. 
+
+After logging in to the eMPF Platform, click on "Action Items" at the top right-hand corner of the homepage to locate and complete your enrolment online. 
+
+You can set up a PA/TVC/SVC account under the "My MPF" > "Enrol an MPF account" page. After selecting the corresponding account, you are required to perform identity verification, provide personal information, indicate your investment choice, and submit the details to the eMPF Platform for processing. An acknowledgment will be sent to you via your preferred communication channel (email or SMS) after the request has been submitted successfully. 
+
+You can set up a casual employee account under the "My MPF" > "Enrol an MPF Account" page. After selecting "Industry Scheme Casual Employee Contribution Account", you are required to perform identity verification, provide personal information, indicate your investment choice, and submit the details to the eMPF Platform for processing. An acknowledgment will be sent to you via your preferred communication channel (email or SMS) after the request has been submitted successfully.
+
+After selecting a MPF account under "Portfolio", you can then check your contribution record on the "Contribution" tab of the eMPF Mobile App.
+
+After the MPF scheme in which you are participating is onboarded to the eMPF Platform, eDDA/DDA has to be set up via the eMPF Platform. You can complete and submit the request under the "My Account" > "Profile Management" > "MPF Account Management" page of the eMPF Platform. If you intend to open a new MPF account (e.g. a TVC account), you may set up the eDDA/DDA during account enrolment.
+
+You can provide the payment information under the "My MPF" > "Make New Contribution" page of the eMPF Mobile App and then input the payment information, e.g. name of the bank and cheque number.
+
+After selecting an MPF scheme account under "Portfolio", you can check your payment status on the "Contribution" tab of the eMPF Mobile App.
+
+eMPF self-service kiosks will not collect physical cheques and remittance statements. All physical cheques and remittance statements should be sent to the eMPF Platform by post ( P.O. Box 98929 Tsim Sha Tsui Post Office ), or through drop-in box in any of the eMPF Service Centres.
+
+eMPF Service Centres do not accept any cash payment for contributions. You may deposit your cheques for contribution payment in the drop-in box, or make electronic payments on the eMPF Platform.
+
+You should submit contribution cheques to eMPF Platform office by post (P.O. Box 98929, Tsim Sha Tsui Post Office) or through drop-in box at any of its 3 service centres (details - www.empf.org.hk). 
+
+the payee name need not be changed. For the payee name on the cheque, you can contact the scheme trustee for further details.
+
+For employers and regular employees, the eMPF Platform will calculate and process the actual contribution amount based on the provided relevant income and / or basic salary, rounding off to the nearest 2 decimal places.
+
+For self-employed persons, the eMPF Platform will calculate and process the actual contribution amount based on the provided relevant income, rounding off to the nearest 2 decimal places.
+
+Special voluntary contributions ("SVC") refer to additional contributions made by a scheme member on top of their mandatory contributions, which are made through the eMPF Platform without involving their employer.
+
+Although different MPF schemes may have used various names for this type of contributions before onboarding the eMPF Platform, all onboarded schemes will uniformly refer to it as "Special Voluntary Contributions" to ensure consistency.
+
+You can submit the fund switching instructions through the eMPF Mobile App under the "My MPF" > "Investment" > "Fund Switching / Fund Rebalancing" page. After submission, you can click "Back to Home" to submit new switching instructions for other scheme account(s).
+
+notification will be sent to you via your preferred communication channel (email or SMS) once the fund switching instruction is submitted successfully.
+
+The cut-off time for member to submit investment instructions (i.e. change of investment mandate or fund switching/rebalancing) to the eMPF Platform is 4:00 pm on each working day (Monday to Friday, except Saturday, Sunday and public holidays).
+
+If the schemes in which you are participating are onboarded to the eMPF Platform, you can consolidate your personal accounts on the eMPF Mobile App. Under the "My MPF" > "Transfer MPF", click "Personal Account Consolidation", select the accounts that you want to consolidate (transfer out), and then choose the personal account that you elect to transfer the benefits to (transfer in).
+
+If the new scheme trustee is not yet onboarded to the eMPF Platform, you should submit your transfer instruction to the new trustee directly. You can also download the transfer request form from the hyperlink under "Transfer MPF" on the eMPF Platform. After choosing the new scheme and clicking "Visit Trustee’s Website", you will be redirected to the trustee’s website to download the trustee’s form.
+
+If the new scheme trustee is onboarded to the eMPF Platform, you should complete and submit the transfer form to the eMPF Platform for handling. Your request can be submitted to the eMPF Platform by post (P.O. Box 98929, Tsim Sha Tsui Post Office), email (forms@support.empf.org.hk) or fax (3197 2988), or to any of the eMPF Service Centres in person.
+
+Member can submit transfer instructions to the relevant ORSO trustee, and the ORSO trustee will submit the instructions to the eMPF Platform for further processing.
+
+notification will be sent to you via your preferred communication channel (email or SMS) when the transfer request is submitted successfully.
+
+Your intermediary can assist you to fill in the transfer form online via the eMPF Assistant Portal of the eMPF Platform. You will then be able to review and verify the e-form prepared by your intermediary and submit it on the eMPF Platform.
+
+You can submit the withdrawal request through the eMPF Platform. If you prefer using the eMPF Mobile App, log in and choose "My MPF" > "Withdraw Benefits".
+
+You can find and submit the instruction to withdraw unclaimed benefits under "Action Items" on the top right-hand corner of the homepage if you have any unclaimed benefits.
+
+Changes to the LSP/SP offsetting sequence may affect the subsidy amount under the Subsidy Scheme for Abolition of MPF Offsetting Arrangement. 
+
+After the implementation of the abolition of MPF offsetting arrangement, the maximum amount of LSP/SP (i.e., the sum of pre-transition and post-transition portions of LSP/SP) is still capped at HK$390,000. If an employee’s total LSP/SP exceeds HK$390,000, the amount in excess of the cap will be deducted from the post-transition portion. 
+
+Your eMPF account will be locked after too many failed login attempts. You are required to reset your password in order to unlock your account.
+
+You can update the current contact details under the "My Account" > "Profile Management" > "eMPF Account Management" page. 
+
+As a self-employed person (SEP), you can report your business loss and apply for a suspension of contributions until your relevant income meets the minimum level again. You can report your business loss under the "MPF Account Management" page. Select the SEP account and then click "Declare Relevant Income" and input the relevant details.
+
+You can report the cessation of self-employment on the "MPF Account Management" page. Select the SEP account, and click "Report Cessation" to provide the details.
+
+You can report the cessation of self-employment and submit the transfer benefits request at the same time. Under the "My MPF" > "Transfer MPF" > "Transfer After Termination of Employment / SEP Account Transfer " page, select the SEP account as the transfer-out account and input the cessation details. You can then indicate your transfer option to transfer the benefits in your SEP account to the contribution account of your current employment or other MPF account. A notification will be sent to you when the benefits have been transferred to the new scheme.
+
+The eMPF self-service kiosks allow employers/members to perform eMPF registration and administration of their MPF accounts, such as enrolment into an MPF scheme, transfer of benefits and fund switching.
+
+Our staff are not in a position to input data to your mobile device. If you encounter any difficulties in using the eMPF Platform, our staff would explain and demonstrate the necessary steps and procedures to you.

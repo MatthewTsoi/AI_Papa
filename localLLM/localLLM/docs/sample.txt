@@ -1,0 +1,14 @@
+
+            Retrieval-Augmented Generation (RAG) is a technique that combines retrieval-based and generation-based approaches
+            for natural language processing tasks. It involves retrieving relevant information from a knowledge base and then 
+            using that information to generate more accurate and informed responses.
+            
+            RAG models first retrieve documents that are relevant to a given query, then use these documents as additional context
+            for language generation. This approach helps to ground the model's responses in factual information and reduces hallucinations.
+            
+            The llama.cpp library is a C/C++ implementation of Meta's LLaMA model, optimized for CPU usage. It allows running LLaMA models
+            on consumer hardware without requiring high-end GPUs.
+            
+            LocalAI is a framework that enables running AI models locally without relying on cloud services. It provides APIs compatible
+            with OpenAI's interfaces, allowing developers to use their own models with the same code they would use for OpenAI services.
+            
