@@ -1,0 +1,29 @@
+https://machinelearningmastery.com/building-a-rag-pipeline-with-llama-cpp-in-python/
+
+https://github.com/ggml-org/llama.cpp
+https://www.empf.org.hk/FAQ/member/?language_id=1
+https://machinelearningmastery.com/building-a-rag-pipeline-with-llama-cpp-in-python/
+https://huggingface.co/meta-llama/Llama-2-7b
+
+
+https://visualstudio.microsoft.com/visual-cpp-build-tools/
+(Desktop development with C++) 
+
+https://developer.nvidia.com/cuda-downloads?target_os=Windows&target_arch=x86_64&target_version=11&target_type=exe_local
+
+https://medium.com/@eddieoffermann/llama-cpp-python-with-cuda-support-on-windows-11-51a4dd295b25
+
+
+
+
+pip install llama-cpp-python --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cu125
+
+
+set CUDA_HOME=c:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v12.5
+set PATH=%CUDA_HOME%\bin;%PATH%
+set PATH=%CUDA_HOME%\libnvvp;%PATH%
+set FORCE_CMAKE=1
+set CMAKE_ARGS=-DGGML_CUDA=on
+set GGML_CUDA=1
+
+https://github.com/abetlen/llama-cpp-python/issues/247
