@@ -1,5 +1,5 @@
 REM setup python virtual environment
-python -m evenv localLLM 
+python -m venv localLLM 
 cd localLLM 
 .\Scripts\activate.bat
 
